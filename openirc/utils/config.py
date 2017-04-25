@@ -7,7 +7,7 @@ def init_config(app):
     elif os.getenv('OPENIRC_CONFIG') is not None:
         app.config.from_envvar('OPENIRC_CONFIG')
     else:
-        app.config.from_pyfile('defaults.cfg')
+        app.config.from_pyfile('../defaults.cfg')
 
 
 def load_environment(app):
@@ -16,7 +16,6 @@ def load_environment(app):
     app.config['TOKENIZER_SECURITY_PASSWORD_SALT'] = os.getenv('TOKENIZER_SECURITY_PASSWORD_SALT', None)
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', None)
     app.config['SECURITY_PASSWORD_SALT'] = os.getenv('SECURITY_PASSWORD_SALT', None)
-    app.config['WTF_CSRF_SSL_STRICT'] = os.getenv('WTF_CSRF_SSL_STRICT', None)
     app.config['WEB_LINK'] = os.getenv('WEB_LINK', None)
     app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', None)
     app.config['MAIL_PORT'] = os.getenv('MAIL_PORT', None)
