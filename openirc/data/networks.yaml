@@ -1,0 +1,36 @@
+networks:
+  - name: GameSurge
+    description: Gaming IRC Network
+    year_established: 1998
+    website: https://gamesurge.net
+    ipv4: irc.gamesurge.net
+    ipv6: irc.gamesurge.net
+    ssl: false
+    certfp: false
+    sasl_plain: false
+    services: srvx
+    services_website: http://www.srvx.net
+
+  - name: Rizon
+    description: Anime and fan subbing network
+    year_established: 2003
+    website: https://rizon.net
+    ipv4: irc.rizon.net
+    ipv6: irc6.rizon.net
+    ssl: true
+    certfp: true
+    sasl_plain: false
+    services: Anope 1.8
+    services_website: https://anope.org
+
+  - name: freenode
+    description: Discussion of free and opensource software
+    year_established: 1997
+    website: https://freenode.net
+    ipv4: chat.freenode.net
+    ipv6: irc6.freenode.net
+    ssl: true
+    certfp: true
+    sasl_plain: true
+    services: Atheme
+    services_website: http://atheme.org
