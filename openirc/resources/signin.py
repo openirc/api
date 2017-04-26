@@ -20,7 +20,8 @@ messages = {
 
 def response(success, i):
     res = 'ok' if success else 'err'
-    return {'status': res, 'message': messages[i], 'data': i}
+    code = 200 if success else 401
+    return {'status': res, 'message': messages[i], 'data': i}, code
 
 def randtoken(n):
     return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(n))
@@ -36,7 +37,7 @@ class APISignin(Resource):
         passwd = args['pass']
 
         if current_user and current_user.is_authenticated:
-            return response(True, 5)
+            return response(False, 5)
 
         if not re.match(r'[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$', email):
             return response(False, 4)
