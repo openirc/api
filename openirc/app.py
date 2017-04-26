@@ -41,6 +41,7 @@ prefix = '/api/v1'
 api.add_resource(APINetworks, '{}/networks'.format(prefix))
 api.add_resource(APISignup, '{}/signup'.format(prefix))
 api.add_resource(APISignin, '{}/signin'.format(prefix))
+api.add_resource(APISignout, '{}/signout'.format(prefix))
 api.add_resource(APIConfirm, '{}/confirm'.format(prefix))
 
 @login_manager.request_loader

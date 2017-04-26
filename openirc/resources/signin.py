@@ -1,7 +1,11 @@
+import random
 import re
+import string
+from flask import request
+from flask_login import current_user
 from flask_restful import Resource, reqparse
 
-from openirc.models import User
+from openirc.models import AuthToken, User
 from openirc.utils.db import db
 
 messages = {
@@ -10,12 +14,17 @@ messages = {
     2: 'Please verify your emaill address before signing in',
     3: 'Email address not registered',
     4: 'Invalid email address',
+    5: 'You are already logged in',
 }
 
 
 def response(success, i):
     res = 'ok' if success else 'err'
     return {'status': res, 'message': messages[i], 'data': i}
+
+def randtoken(n):
+    return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(n))
+
 
 class APISignin(Resource):
     def post(self):
@@ -26,17 +35,36 @@ class APISignin(Resource):
         email = args['email']
         passwd = args['pass']
 
+        if current_user and current_user.is_authenticated:
+            return response(True, 5)
+
         if not re.match(r'[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$', email):
             return response(False, 4)
 
-        entry = User.get_by_email(email)
-        if not entry:
+        user = User.get_by_email(email)
+        if not user:
             return response(False, 3)
 
-        if not entry.is_confirmed():
+        if not user.is_confirmed():
             return response(False, 2)
 
-        if not entry.check_password(passwd):
+        if not user.check_password(passwd):
             return response(False, 1)
 
-        return response(True, 0)
+        token = randtoken(50)
+        while not AuthToken.is_unique(token):
+            token = randtoken(50)
+
+        token_entry = AuthToken(token, user.user_id)
+
+        ip = '255.255.255.255'
+        if len(request.access_route):
+            ip = request.access_route[0]
+
+        token_entry.last_ip = ip
+        token_entry.agent = request.headers.get('User-Agent')
+
+        db.session.add(token_entry)
+        db.session.commit()
+
+        return {'status': 'ok', 'message': messages[0], 'data': 0, 'token': token}

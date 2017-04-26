@@ -30,6 +30,9 @@ class User(UserMixin, db.Model):
     def is_confirmed(self):
         return self.confirmed is not None
 
+    def is_anonymous(self):
+        return False
+
     def mark_confirmed(self):
         self.confirmed = datetime.utcnow()
         self.confirmed = self.confirmed.replace(tzinfo=pytz.UTC)
