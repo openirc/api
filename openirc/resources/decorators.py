@@ -3,7 +3,7 @@ from functools import wraps
 from flask_login import current_user, logout_user
 
 def err(msg):
-    return {'status': 'err', 'message': msg, 'data': -1}, 403
+    return {'status': 'err', 'message': msg, 'data': -1}, 401
 
 
 def login_required(f):
